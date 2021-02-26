@@ -57,13 +57,30 @@ struct CPU
     {
         return Data[address];
     }
+    //opcodes
+    static constexpr Byte
+        INS_LDA_IM = 0xA9;
+
 
     void execute(u32 Cycles, MEM& memory)
     {
         while(Cycle > 0)
         {
             Byte ins = FetchByte(Cycles, memory);
-            (void)ins;
+            switch(ins)
+            {
+                case INS_LDA_IM :
+                {
+                    Byte Value = FetchByte(Cycles, memory);
+                    A = Value;
+                    Z = (A == 0);
+                    N = (A & 0b0000000) > 0;
+                } break;
+                default:
+                {
+                    printf("Instruction not found.");
+                } break;
+            }
         };
     };
     
